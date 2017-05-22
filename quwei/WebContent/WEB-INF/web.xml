@@ -10,7 +10,7 @@
 		<init-param>
 			<param-name>configClass</param-name>
 			<!-- 配置类 -->
-			<param-value>com.limicala.config.BaseConfig</param-value>
+			<param-value>config.BaseConfig</param-value>
 		</init-param>
 	</filter>
 

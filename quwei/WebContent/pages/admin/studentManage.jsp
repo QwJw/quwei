@@ -1,86 +1,17 @@
-<%@page import="java.util.List"%>
-<%@page import="com.jfinal.plugin.activerecord.Record"%>
-<%@page import="com.jfinal.plugin.activerecord.Page"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="pragma" content="no-cache">
-    <meta http-equiv="cache-control" content="no-cache">
-    <meta http-equiv="expires" content="0">
-    <link href="<%=request.getContextPath()%>/frame/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="<%=request.getContextPath()%>/frame/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-	<title>趣味问答系统-学生管理</title>
-	
-	<style>
-        body{
-            background-color: #f5f5f5;
-        }
-        img{
-            width:100%;
-            max-height:200px;
-        }
-        @media (min-width: 950px) {
-            img{
-                height:200px;
-            }
-        }
-		
-        table td {
-            vertical-align: middle !important;
-        }
-        
-        .content{
-            /* max-width: 200px; */
-            word-break:break-all;
-        }
-        
-        .tb-responsive {
-            width: 100%;
-            max-height: 600px;
-            overflow-y:auto;
-            -ms-overflow-style: -ms-autohiding-scrollbar;
-        }
-    </style>
+<%@include file="./include/head.jsp" %>
+<title>Insert title here</title>
 </head>
 <body>
-	<input id="url" class="hidden" value="<%=request.getContextPath()%>"/>
-	<input id="param" class="hidden" value="<%=request.getQueryString()%>"/>
-    <div class="container">
-        <!-- 图片 -->
-        <div class="jumbotron text-center" style="padding-top: 5px;">
-            <img src="<%=request.getContextPath()%>/resources/images/main.jpg" class="img-rounded">
-        </div>
-        <!-- 导航栏 -->
-        <div class="navbar " style="padding-top: 4px;">
-            <div class="navbar navbar-inner">
-                <div class="container">
-                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="brand" href="mainView"><span class="icon-home" style="margin-top: 5px;"></span><strong> 首 页 </strong></a>
-
-                    <div class="nav-collapse collapse text-center">
-                        <ul class="nav" style="padding-top:1px;">
-                            <li><a href="userManageView"><span class="icon-user"></span> 管理员管理</a></li>
-                            <li class="active"><a><span class="icon-user"></span> 学生管理</a></li>
-                            <li><a href="questionManageView"><span class="icon-list-alt"></span> 题库信息管理</a></li>
-                            <li><a href="historyManageView"><span class="icon-check"></span> 答题记录管理</a></li>
-                            <li><a href="configView"><span class="icon-wrench"></span> 系统配置</a></li>
-                            <li><a href="#" onclick="loginout()"><span class="icon-off"></span> 退出系统</a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-                </div>
-            </div>
-        </div>
-        
-        <!-- 用户信息 -->
+   <div class="container">
+		<%@include file="./include/nav.jsp" %>
+		<!-- 修改这个div即可 -->
+		 <!-- 用户信息 -->
         <div class="container text-center">
             <ul class="inline"><!--操作-->
                 <li>
@@ -90,42 +21,32 @@
                     		</select>
 						</div>
 						<input class="span2" type="text" id="condit" value="${condit }" placeholder="关键字">
+						<button class="btn" type="button" id="s" onclick="query(this);"><span class="icon-search"></span> 查 找 </button>
 					</div>
 				</li>
-				<li><button class="btn" type="button" id="s" onclick="query(this);"><span class="icon-search"></span> 查 找 </button></li>
-                <li><button type="button" class="btn" onclick="location.href='stuManageView'"><span class="icon-refresh"></span> 刷 新 </button></li>
+				
                 <li><button type="button" class="btn" data-toggle="modal" data-target="#editModal"><span class="icon-plus"></span> 添 加 </button></li>
-                
-                
-            </ul>
-			<ul class="inline"><!--操作-->
 				<li><button type="button" class="btn" data-toggle="modal" data-target="#uploadModal"><span class="icon-plus-sign"></span> 批量导入 </button></li>
 				<li><button type="button" class="btn" id="singleDels" onclick="deleteStudents(this)"><span class="icon-trash"></span> 删除所选 </button></li>
-                
-                <li><button  type="button" class="btn"  onclick="emptyStudent(this)"><span class="icon-trash"></span> 清空数据 </button></li>
 			</ul>
             <div class="container tb-responsive">
-                <table id="table" class="table table-condensed tb-responsive" style="max-width:700px;margin-left:auto;margin-right:auto;">
-                 <%--    <caption class="text-left">
-                    	<h4>
-                    		<strong>学生信息</strong>
-                    		<button style="margin-bottom: 5px;" class="btn" data-toggle="modal" data-target="#editModal"><span class="icon-plus"></span> 添 加 </button>
-                    	</h4>
-                    </caption> --%>
+                <table id="table" class="table table-condensed tb-responsive" style="margin-left:auto;margin-right:auto;">
                     <thead style="white-space:nowrap; position: relative;z-index: 1;/*绝对定位 */background:#cccccc;">
 	                    <tr>
 	                    	<th style="width: 50px;"> 
                                 	全 选<input type="checkbox" id="select_all"/>
-                            </th>
-	                        <th style="padding-left: 33px;min-width: 110px;">学号</th>
+                            </th>  
+	                        <th style="padding-left: 33px;min-width: 110px;">用户ID</th>
 	                        <th style="min-width: 75px;">姓名</th>
-	                        <th style="min-width: 100px;width: 200px;">学院</th>
+	                        <th style="min-width: 75px;">性别</th>
+	                        <th style="min-width: 200px;">身份证号码</th>
+	                        <th style="min-width: 100px;">电话号码</th>
 	                        <th style="min-width:50px;padding-left: 9px;">&nbsp;&nbsp;&nbsp;编辑</th>
 	                    </tr>
                     </thead>
                    
                 
-                    <tbody>
+                    <%-- <tbody>
                     	<%Integer table_id = 1; %>
                     	<c:forEach items="${page.list }" var="s">
                     	
@@ -134,7 +55,7 @@
                     			<td style="padding-left: 25px;"><input  type="checkbox" name="stu_list" value="${s.sid }"/></td><!--选择-->
 		                        <td style="padding-left: 33px;min-width: 110px;">${s.sid }</td>
 		                        <td >${s.sname }</td>
-		                       <%--  <td>${s.sprofession }</td> --%>
+		                        <td>${s.sprofession }</td>
 		                        <td >${s.scollege }</td>
 		                        <td >
 		                            <button class="btn btn-link" id="<%=table_id %>" data-toggle="modal" data-target="#editModal" onclick="editStudent(this)">编辑</button>
@@ -144,19 +65,17 @@
 		                    </tr>
                     
 	                    </c:forEach>
-					</tbody>
+					</tbody> --%>
 				
                     	
 		                
                
                 </table>
             </div>
-			<%@include file="../common/page.jsp" %>
+			<%-- <%@include file="../common/page.jsp" %> --%>
         </div>
-
-    </div>
-    
-    <!--公用批量导入模态框-->
+	</div>
+	<!--公用批量导入模态框-->
     <div class="modal hide fade" id="uploadModal" tabindex="0" role="dialog" aria-hidden="true" data-backdrop="true">
         <div class="modal-dialog" role="document" >
             <div class="modal-content">
@@ -207,7 +126,10 @@
                     </ul>
                     <ul class="inline">
                         <li><h5>学院</h5></li>
-                        <li><input type="text"  id="scollege"/></li>
+                        <li>
+                        	<input type="text" style="display:none"/><input type="password" style="display:none"/>
+                        	<input type="text"  id="scollege"/>
+                        </li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -258,11 +180,8 @@
             </div>
         </div>
     </div>
-    
-    
-    <script src="<%=request.getContextPath()%>/frame/jquery/js/jquery.js" type="text/javascript"></script>
-    <script src="<%=request.getContextPath()%>/frame/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="<%=request.getContextPath()%>/resources/js/admin/studentManage.js" type="text/javascript"></script>
+	<%@include file="./include/foot.jsp" %>
+	<script src="<%=request.getContextPath()%>/resources/admin/js/studentManage.js" type="text/javascript"></script>
     
     <script>
     	$(document).ready(function() {
@@ -271,8 +190,8 @@
     
     	
 	    function initSearch(id,st){
-	    	var search = new Array('','学号','姓名','学院');
-	   		for(var i = 1; i <= 3; i++){
+	    	var search = new Array('','用户ID','姓名');
+	   		for(var i = 1; i <= 2; i++){
    				if(i != st){//可选
    					$(id).append("<option value='"+i+"'>"+search[i]+"</option>");
    				}else{//设置默认

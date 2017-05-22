@@ -12,9 +12,7 @@
 		<%@include file="./include/nav.jsp" %>
 		<!-- 修改这个div即可 -->
 		<div class="container text-center" style="padding-top: 30px;">
-	        <h3 class="text-warning">欢迎使用</h3>
-	        <h1 style="font-size: 40px;">用户名</h1>
-	        [按钮]修改密码
+	        	面试官管理
 	    </div>
 	</div>
 	<!--公用选择模态框-->
