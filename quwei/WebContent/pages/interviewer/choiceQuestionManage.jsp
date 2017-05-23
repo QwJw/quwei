@@ -130,7 +130,7 @@
 	                                <td class="itemContent" id="${s.c_id }A">${s.c_choiceA }</td><!--选项内容-->
 	                                <td rowspan="4" style="width: 50px;" id="${s.c_id }Answer">${s.c_answer }</td><!--答案-->
 	                                <%-- <td rowspan="4" class="tip" id="${s.qid }Explain">${s.qexplain }</td><!--题目注释--> --%>
-	                                <td rowspan="4">${s.qall_times }</td><!--回答次数-->
+	                                <td rowspan="4">${s.all_times }</td><!--回答次数-->
 	                                <td rowspan="4"><fmt:formatNumber value="${s.true_rate * 100 }" pattern="0.00"/>%</td><!--正确率-->
 	                                <%-- <td rowspan="4">
 	                                	<input class="hidden" id="o${s.qid }State" value="${s.qlimit }"/>
@@ -306,8 +306,7 @@
 
 
 
-    <script src="<%=request.getContextPath()%>/frame/jquery/js/jquery.js" type="text/javascript"></script>
-    <script src="<%=request.getContextPath()%>/frame/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <%@include file="./include/foot.jsp" %>
     <script src="<%=request.getContextPath()%>/resources/interviewer/js/choiceQuestionManage.js" type="text/javascript"></script>
     <script>
         $("#singleModal").on('hidden', function () {

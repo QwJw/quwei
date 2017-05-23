@@ -1,32 +1,13 @@
-//******************显示错误提示信息**************************
-function showWrongTip(msg){
-	$("#tipContent").text(msg);
-	$("#tipContent").addClass("text-error");
-	$("#tipContent").removeClass("text-success");
-	$("#tipModal").modal('show');
-}
-
-//**************************显示正确正确信息**************************
-function showRightTip(msg){
-	$("#tipContent").text(msg);
-	$("#tipContent").removeClass("text-error");
-	$("#tipContent").addClass("text-success");
-	$("#tipModal").modal('show');
-}
-
-//**************************显示选择信息**************************
-function showChoose(msg){
-	$("#chooseContent").text(msg);
-	$("#chooseModal").modal('show');
-}
-
 //************************** 清 除 编 辑 模 态 框 内 容 **************************
 function clean(){
 	$("#table_id").val("");
 	$("#old_sid").val("");
 	$("#sid").val("");
     $("#sname").val("");
-    $("#scollege").val("");
+    /*$("#scollege").val("");*/
+    $("#sex").val("");
+    $("#cardnumber").val("");
+    $("#phone").val("");
     $("#check_tip").html("");
     $("#update_button").removeAttr("disabled");
 }
@@ -38,13 +19,17 @@ function editStudent(obj){
 	var table_row = document.getElementById("table").rows[id];
     var sid = table_row.cells[1].innerText;  
     var sname = table_row.cells[2].innerText;
-    var scollege = table_row.cells[3].innerText;
+    var sex = table_row.cells[3].innerText;
+    var cardnumber = table_row.cells[4].innerText;
+    var phone = table_row.cells[5].innerText;
     //向模态框中传值
     $("#table_id").val(id);
     $("#old_sid").val(sid);
 	$("#sid").val(sid);
     $("#sname").val(sname);
-    $("#scollege").val(scollege);
+    $("#sex").val(sex);
+    $("#cardnumber").val(cardnumber);
+    $("#phone").val(phone);
     $("#singleModal").modal('show');
 }
 
@@ -54,15 +39,24 @@ function addStudent(){
 	var old_sid = $("#old_sid").val();
 	var sid = $("#sid").val().trim();
 	var sname = $("#sname").val().trim();
-	var scollege = $("#scollege").val().trim();
-	if (sid == "" || sname == "" || scollege == ""){
+	var sex = $("#sex").val().trim();
+	var cardnumber = $("#cardnumber").val().trim();
+	var phone = $("#phone").val().trim();
+	if (sid == "" || sname == ""){
 		showWrongTip("学生信息不能为空");
 		return;
 	}
 	$.ajax({
         type: "post",  
-        url: $("#url").val()+"/admin/updateStudent",
-        data: "old_sid=" + old_sid + "&student.sid=" + sid + "&student.sname=" + sname + "&student.scollege=" + scollege,
+        url: $("#url").val()+"/admin/addOrUpdateStudent",
+        data: {
+        	"old_sid" : old_sid ,
+        	"student.sid" : sid,
+        	"student.sname" : sname,
+        	"student.sex" : sex,
+        	"student.cardnumber" : cardnumber,
+        	"student.phone" : phone,
+        },
         success: function(resp) {
         	if (resp.type == "add"){//添加类型
         		if (resp.success){
@@ -80,7 +74,10 @@ function addStudent(){
             	    table_row.cells[0].innerHTML = input_str;  
             		table_row.cells[1].innerText = sid;  
             	    table_row.cells[2].innerText = sname;
-            	    table_row.cells[3].innerText = scollege;
+            	    /*table_row.cells[3].innerText = scollege;*/
+            	    table_row.cells[3].innerText = sex;
+            	    table_row.cells[4].innerText = cardnumber;
+            	    table_row.cells[5].innerText = phone;
             		console.log(table_row);
             	}else{
             		showWrongTip(resp.msg);
@@ -99,7 +96,7 @@ function deleteStudent(obj){
     //获取表格中的一行数据  
     var sid = document.getElementById("table").rows[id].cells[1].innerText;
 	$("#chooseOk").unbind("click");
-	showChoose("确 定 删 除 该 题 目 信 息 吗 ？");
+	showChoose("确 定 删 除 该 学 生 信 息 吗 ？");
 	$("#chooseOk").bind("click", function(){
 		$.ajax({
 			type: "post",
@@ -108,7 +105,7 @@ function deleteStudent(obj){
 			success: function(resp){
 				if (resp.success){
 					$("#chooseModal").modal('hide');
-					location.href = "stuManageView?" + $("#param").val();
+					location.href = "studentManageView?"+ $("#param").val();;
 				}else{
 					showWrongTip(resp.msg);
 				}
@@ -143,7 +140,7 @@ function deleteStudents(ob){
 			data: "delType=m&id=" + delId,
 			success: function(resp){
 				$("#chooseModal").modal('hide');
-				location.href = "stuManageView?" + $("#param").val();
+				location.href = "studentManageView?" + $("#param").val();
 			},
 			error: function(resp){
 				$("#chooseModal").modal('hide');
@@ -164,14 +161,14 @@ function check_exsit(){
 	        data: "sid=" + sid,  
 	        success: function(result) {     	
 	            if(result){
-	            	$("#check_tip").html("<span style='color:red'>学号已存在</span>");
+	            	$("#check_tip").html("<span style='color:red'>用户ID已存在</span>");
 	            	$("#update_button").attr("disabled","disabled");
 	            }else{
+	            	$("#check_tip").html("");
 	            	$("#update_button").removeAttr("disabled");
 	            }
 	        },
 			error: function(result){
-				alert("bbbb");
             	$("#check_tip").html("<span style='color:red'>请求出错</span>");
             	$("#update_button").attr("disabled","disabled");
 			}
@@ -200,14 +197,3 @@ function doUpload(){
 	}
 }
 
-/**
- * 注销
- * @returns
- */
-function loginout(){
-	$("#chooseOk").unbind("click");
-	showChoose("确 定 要 注 销 管  理  员  账  号  吗 ？");
-	$("#chooseOk").bind("click", function(){
-		window.location.href=$("#url").val()+"/admin/loginout";
-	});
-}

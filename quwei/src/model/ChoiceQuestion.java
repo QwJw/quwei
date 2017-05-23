@@ -18,8 +18,8 @@ public class ChoiceQuestion extends BaseChoiceQuestion<ChoiceQuestion> {
 	 * 不要写在 Controller 中，养成好习惯，有利于大型项目的开发与维护
 	 */
 	public Page<ChoiceQuestion> paginate(int pageNumber, int pageSize, String condit) {
-//		StringBuilder selectSql = new StringBuilder();
-//		selectSql.append(" select *,if(qall_times = 0,0,(qtrue_times/qall_times)) as true_rate");
+		StringBuilder selectSql = new StringBuilder();
+		selectSql.append(" select *,if(all_times = 0,0,(true_times/all_times)) as true_rate");
 		StringBuilder fromSql = new StringBuilder();
 		fromSql.append("from choice_question");
 		StringBuilder whereSql = new StringBuilder();
@@ -29,7 +29,7 @@ public class ChoiceQuestion extends BaseChoiceQuestion<ChoiceQuestion> {
 		}
 		StringBuilder orderSql = new StringBuilder();
 		orderSql.append(" order by c_id asc");
-		return paginate(pageNumber, pageSize, "select *", fromSql.append(whereSql).append(orderSql).toString());
+		return paginate(pageNumber, pageSize, selectSql.toString(), fromSql.append(whereSql).append(orderSql).toString());
 	}
 	
 	/**

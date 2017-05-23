@@ -30,4 +30,8 @@ public interface InterviewerController {
 	 * 删除问题
 	 */
 	public void deleteChoice();
+	/**
+	 * 注销
+	 */
+	public void loginOut();
 }

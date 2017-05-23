@@ -21,6 +21,7 @@ import controller.impl.InterviewerControllerImpl;
 import controller.impl.StudentControllerImpl;
 import model._MappingKit;
 
+
 /**
  * JFinal框架总配置类（继承JFinalConfig类）
  * 方法作用：

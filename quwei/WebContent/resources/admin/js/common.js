@@ -1,8 +1,11 @@
 url = window.location.href;
-if(url.indexOf("cardManageView") > 0){
-	$("#cardManageView").addClass("active");
-}else if(url.indexOf("historyManageView") > 0){
-	$("#historyManageView").addClass("active");
+viewList = ["studentManageView", "interviewerManageView"];
+
+for(var i = 0; i < viewList.length; i++){
+	item = viewList[i];
+	if(url.indexOf(item) > 0){
+		$("#"+item).addClass("active");
+	}
 }
 
 //**************************显示选择信息**************************
@@ -29,7 +32,7 @@ function showRightTip(msg){
 
 
 //************************** 清 除 编 辑 模 态 框 内 容 **************************
-function clean(){
+/*function clean(){
 	$("#table_id").val("");
 	$("#old_sid").val("");
 	$("#sid").val("");
@@ -37,7 +40,7 @@ function clean(){
     $("#scollege").val("");
     $("#check_tip").html("");
     $("#update_button").removeAttr("disabled");
-}
+}*/
 
 /**
  * 注销
@@ -47,6 +50,6 @@ function loginout(){
 	$("#chooseOk").unbind("click");
 	showChoose("确 定 要 注 销 管  理  员  账  号  吗 ？");
 	$("#chooseOk").bind("click", function(){
-		window.location.href=$("#url").val()+"/admin/loginout";
+		window.location.href=$("#url").val()+"/admin/loginOut";
 	});
 }

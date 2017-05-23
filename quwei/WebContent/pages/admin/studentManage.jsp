@@ -46,7 +46,7 @@
                     </thead>
                    
                 
-                    <%-- <tbody>
+                    <tbody>
                     	<%Integer table_id = 1; %>
                     	<c:forEach items="${page.list }" var="s">
                     	
@@ -55,8 +55,9 @@
                     			<td style="padding-left: 25px;"><input  type="checkbox" name="stu_list" value="${s.sid }"/></td><!--选择-->
 		                        <td style="padding-left: 33px;min-width: 110px;">${s.sid }</td>
 		                        <td >${s.sname }</td>
-		                        <td>${s.sprofession }</td>
-		                        <td >${s.scollege }</td>
+		                        <td>${s.sex }</td>
+		                        <td >${s.cardnumber }</td>
+		                        <td >${s.phone }</td>
 		                        <td >
 		                            <button class="btn btn-link" id="<%=table_id %>" data-toggle="modal" data-target="#editModal" onclick="editStudent(this)">编辑</button>
 		                            <button class="btn btn-link" id="<%=table_id %>" data-toggle="modal" data-target="#judgeModal" onclick="deleteStudent(this)">删除</button>
@@ -65,7 +66,7 @@
 		                    </tr>
                     
 	                    </c:forEach>
-					</tbody> --%>
+					</tbody>
 				
                     	
 		                
@@ -117,7 +118,7 @@
                 <div class="modal-body text-center">
                 	
                     <ul class="inline">
-                        <li><h5>学号 </h5></li>
+                        <li><h5>用户ID </h5></li>
                         <li><input type="text" onchange="check_exsit()" id="sid"/></li>
                     </ul>
                     <ul class="inline">
@@ -125,15 +126,23 @@
                         <li><input type="text" id="sname"/></li>
                     </ul>
                     <ul class="inline">
-                        <li><h5>学院</h5></li>
+                        <li><h5>性别</h5></li>
                         <li>
                         	<input type="text" style="display:none"/><input type="password" style="display:none"/>
-                        	<input type="text"  id="scollege"/>
+                        	<input type="text"  id="sex"/>
                         </li>
+                    </ul>
+                    <ul class="inline">
+                        <li><h5>身份证号码</h5></li>
+                        <li><input type="text" id="cardnumber"/></li>
+                    </ul>
+                    <ul class="inline">
+                        <li><h5>电话号码</h5></li>
+                        <li><input type="text" id="phone"/></li>
                     </ul>
                 </div>
                 <div class="modal-footer">
-                	<ul class="inline">
+                	<ul class="inline"> 
                 		<li><p id="check_tip"></p></li>
                 		<li><button type="button" id="update_button" class="btn btn-primary" onclick="addStudent()">确定</button></li>
                 		<li><button type="button" class="btn btn-default" data-dismiss="modal"  aria-hidden="true">取消</button></li>
@@ -251,7 +260,7 @@
 	    		showWrongTip("请输入关键字");
 	    		return;
 	    	}
-	    	location.href = "stuManageView?search_type="+search_type+"&condit"+"="+condiValue;
+	    	location.href = "studentManageView?search_type="+search_type+"&condit"+"="+condiValue;
 	    }	
     
     </script>

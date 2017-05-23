@@ -1,5 +1,9 @@
 package model;
 
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+
 import model.base.BaseStudent;
 
 /**
@@ -8,4 +12,78 @@ import model.base.BaseStudent;
 @SuppressWarnings("serial")
 public class Student extends BaseStudent<Student> {
 	public static final Student dao = new Student().dao();
+
+	
+	
+	
+	private final static class SearchType{
+		public static final Integer ID = 1;
+		public static final Integer NAME = 2;
+	}
+	/**
+	 * 所有 sql 与业务逻辑写在 Service 中，在此放在 Model 中仅为示例，
+	 * 不要写在 Controller 中，养成好习惯，有利于大型项目的开发与维护
+	 */
+	public Page<Student> paginate(int pageNumber, int pageSize, Integer search_type, String condit) {
+		StringBuilder selectSql = new StringBuilder();
+		selectSql.append(" select * ");
+		StringBuilder fromSql = new StringBuilder();
+		fromSql.append("from student");
+		StringBuilder whereSql = new StringBuilder();
+		whereSql.append(" where 1 = 1 ");
+		if(StrKit.notBlank(condit)){
+			if(search_type == SearchType.ID){
+				whereSql.append(" and sid like ").append("'%").append(condit).append("%'");
+			}else if(search_type == SearchType.NAME){
+				whereSql.append(" and sname like ").append("'%").append(condit).append("%'");
+			}
+		}
+		StringBuilder orderSql = new StringBuilder();
+		orderSql.append(" order by sid asc");
+		return paginate(pageNumber, pageSize, selectSql.toString(), fromSql.append(whereSql).append(orderSql).toString());
+	}
+	
+	
+	/**
+	 * 更新学生信息
+	 * @param student
+	 * @param old_sid
+	 * @return
+	 */
+	public boolean updateStudent(Student student,String old_sid){
+		boolean flag = student.update();
+		String sid = student.getSid();
+		if (!sid.equals(old_sid)) {
+			flag =flag && Db.update("update student set sid=? where sid=?", sid ,old_sid) > 0;
+		}
+		return flag;
+	}
+
+	/**
+	 * 返回3个状态：“0”删除失败，一个都没删除成功；“1”删除成功；“2”只删除部分
+	 * @param ids
+	 * @return
+	 */
+	public int deleteStudents(String ids){
+		/*
+		 * split分隔符总结
+			1.字符"|","*","+"都得加上转义字符，前面加上"\\"。
+			2.而如果是"\"，那么就得写成"\\\\"。
+			3.如果一个字符串中有多个分隔符，可以用"|"作为连字符。
+		 */
+		String[] id = ids.split("\\|");
+		Integer idAllNum = id.length;
+		int idDelNum = 0;
+	
+		for (int i = 0; i < idAllNum; ++i){
+			if(deleteById(id[i]))
+				idDelNum++;
+		}
+		if (idAllNum.equals(idDelNum)){
+			return 1;
+		}else if(idAllNum.equals("0")){
+			return 0;
+		}else
+			return 2;
+	}
 }

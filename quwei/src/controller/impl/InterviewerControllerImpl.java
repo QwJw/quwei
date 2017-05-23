@@ -129,4 +129,11 @@ public class InterviewerControllerImpl extends BaseController implements Intervi
 		renderJson(rm);
 	}
 
+	@Override
+	public void loginOut() {
+		// TODO Auto-generated method stub
+		getSession().invalidate();
+		redirect("/login_interviewer");
+	}
+
 }

@@ -17,4 +17,20 @@ public interface AdminController {
 	 * 面试官管理视图
 	 */
 	public void interviewerManageView();
+	/**
+	 * 查看学生ID是否存在
+	 */
+	public void checkExsitStudent();
+	/**
+	 * 添加或修改学生
+	 */
+	public void addOrUpdateStudent();
+	/**
+	 * 删除学生
+	 */
+	public void deleteStudent();
+	/**
+	 * 注销
+	 */
+	public void loginOut();
 }
