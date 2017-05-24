@@ -93,11 +93,11 @@
                                 	<input class="span2" type="text" placeholder="题目关键字" id="scondi" value="${scondi }">
                                 </c:if>
                                 
-                                <button class="btn" type="button" id="s" onclick="query(this);"><span class="icon-search"></span> 查 找 </button>
+                                <button class="btn" type="button" id="s" onclick="querys(this);"><span class="icon-search"></span> 查 找 </button>
                             </div>
                         </li>
-                        <li><button type="button" class="btn" data-toggle="modal" data-target="#singleModal"><span class="icon-plus"></span> 添 加 </button></li>
-                        <li><button type="button" class="btn" id="singleDels" onclick="deleteQuestions(this)"><span class="icon-trash"></span> 删除所选 </button></li>
+                        <li><button type="button" class="btn" data-toggle="modal" data-target="#fillModal"><span class="icon-plus"></span> 添 加 </button></li>
+                        <li><button type="button" class="btn" onclick="deletefillQuestions()"><span class="icon-trash"></span> 删除所选 </button></li>
                         <li><button type="button" class="btn" data-toggle="modal" data-target="#uploadModal" id="single" onclick="changeUpLoadflag(this)"><span class="icon-plus-sign"></span> 批量导入 </button></li>
                     </ul>
                     <!--题库内容（表格显示）-->
@@ -109,13 +109,13 @@
                                     <input type="checkbox" id="singleCB"/>
                                 </th>
                                 <th >题 目 内 容</th>
-                                <th colspan="2">选 项</th>
-                                <th style="width: 50px;">答案</th>
-                                <th style="width: 100px;">注解</th>
+                               <!-- <th colspan="2">选 项</th>--> 
+                                <th style="width: 100px;">答案</th>
+                               <!--  <th style="width: 100px;">注解</th> -->
                                 <th style="width: 15px;">回答次数（次）</th>
                                 <th style="width: 15px;">正确率（%）</th>
-                                <th >答题限定</th>
-                                <th style="min-width:50px;padding-left: 9px;">&nbsp;&nbsp;&nbsp;编 辑</th>
+                                <!--  <th >答题限定</th>-->
+                                <th style="min-width:100px;padding-left: 9px;">&nbsp;&nbsp;&nbsp;编 辑</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -124,76 +124,67 @@
 
 							<c:forEach items="${page.list }" var="s">
 								<tr>
-	                                <td rowspan="4" style="padding-left: 25px;"><input type="checkbox" value="${s.qid }" name="singleCB"/></td><!--选择-->
-	                                <td rowspan="4" class="content" id="${s.qid }Content">${s.qcontent}</td>
-	                                <td style="max-width: 7px;"><strong>A</strong></td><!--选项标记-->
-	                                <td class="itemContent" id="${s.qid }A">${s.qa }</td><!--选项内容-->
-	                                <td rowspan="4" style="width: 50px;" id="${s.qid }Answer">${s.qanswer }</td><!--答案-->
-	                                <td rowspan="4" class="tip" id="${s.qid }Explain">${s.qexplain }</td><!--题目注释-->
-	                                <td rowspan="4">${s.qall_times }</td><!--回答次数-->
-	                                <td rowspan="4"><fmt:formatNumber value="${s.true_rate * 100 }" pattern="0.00"/>%</td><!--正确率-->
-	                                <td rowspan="4">
+	                                <td rowspan="1" style="padding-left: 25px;"><input type="checkbox" value="${s.f_id }" name="singleCB"/></td><!--选择-->
+	                                <td rowspan="1" class="content" id="${s.f_id }Content">${s.f_question}</td>
+	                             
+	                                <td rowspan="1" style="width: 50px;" id="${s.f_id }Answer">${s.f_answer }</td><!--答案-->
+	                              <!-- <td rowspan="4" class="tip" id="${s.f_id }Explain">${s.qexplain }</td>题目注释-->
+	                                <td rowspan="1">${s.all_times }</td><!--回答次数-->
+	                                <td rowspan="1"><fmt:formatNumber value="${s.true_rate * 100 }" pattern="0.00"/>%</td><!--正确率-->
+	                                <%-- <td rowspan="4">
 	                                	<input class="hidden" id="o${s.qid }State" value="${s.qlimit }"/>
 	                                	<select id="${s.qid }State" onchange="setState(this)" class="${s.qlimit eq '1' ? 'text-error' : '' }" style="width: 65px;">
 										  <option ${s.qlimit eq "0" ? "SELECTED" : ""} value="0">随机</option>
 										  <option ${s.qlimit eq "1" ? "SELECTED" : ""} value="1">优先</option>
 										</select>
-	                                </td><!--答题限定-->
-	                                <td rowspan="4" style="width: 150px;"><!--题目操作->编辑->删除-->
-	                                    <a class="btn btn-link" id="${s.qid }" onclick="editSingle(this)">编辑</a>
-	                                    <a class="btn btn-link" id="${s.qid }del" onclick="deleteQuestion(this)">删除</a>
+	                                </td><!--答题限定--> --%>
+	                                <td rowspan="1" style="width: 150px;"><!--题目操作->编辑->删除-->
+	                                    <a class="btn btn-link" id="${s.f_id }" onclick="editfill(this)">编辑</a>
+	                                    <a class="btn btn-link" id="${s.f_id }del" onclick="deletefillQuestion(this)">删除</a>
 	                                </td>
 	                            </tr>
-	                            <tr><!--B选项-->
-	                                <td style="max-width: 7px;"><strong>B</strong></td>
-	                                <td class="itemContent" id="${s.qid }B">${s.qb }</td>
-	                            </tr>
-	                            <tr><!--C选项-->
-	                                <td style="max-width: 7px;"><strong>C</strong></td>
-	                                <td class="itemContent" id="${s.qid }C">${s.qc }</td>
-	                            </tr>
-	                            <tr><!--D选项-->
-	                                <td style="max-width: 7px;"><strong>D</strong></td>
-	                                <td class="itemContent" id="${s.qid }D">${s.qd }</td>
-	                            </tr>
-	                            <tr style="max-height: 1px;"><!--间隔-->
-	                                <td colspan="10" style="max-height: 1px; background-color:#cccccc;"></td>
-	                            </tr>
+	                            
 							</c:forEach>
 
                             </tbody>
                         </table>
                     </div>
                     <!--分页-->
-                    <%-- <%@include file="../common/page.jsp" %> --%>
+                   <%@include file="./include/page.jsp" %>
 
                     <!--modal添加单个题目模态框-->
                     <!--
                         Button trigger modal 添加触发按钮，即“添加按钮”
-                                                                        为触发按钮添加属性： data-toggle="modal" data-target="#singleModal"  对应id
+                                                                        为触发按钮添加属性： data-toggle="modal" data-target="#fillModal"  对应id
                         data-backdrop="false" 点击窗口外不会关闭窗口
                     -->
                     <!-- 单项选择题添加Modal -->
-                    <div class="modal hide fade" id="singleModal" tabindex="0" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+                    <div class="modal hide fade" id="fillModal" tabindex="0" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
                         <div class="modal-dialog" role="document" >
                             <div class="modal-content">
                                 <div class="modal-header red">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">新 增 单 项 选 择 题 目</h4>
-                                    <input id="singleId" value="" class="hidden"/>
+                                    <h4 class="modal-title">新 增 填 空 题 题 目</h4>
+                                    <input id="fillId" value="" class="hidden"/>
                                 </div>
                                 <div class="modal-body">
                                     <form class="form-horizontal" style="width: 100%;" id="singlePlus">
                                         <table style="width: 90%;">
                                             <tr>
                                                 <td colspan="1"><strong  style="white-space: nowrap">题目:</strong></td>
-                                                <td colspan="3"><textarea id="singleContent" style="width: 100%;max-width:100%;height: 100px;" placeholder="题目内容"></textarea></td>
+                                                <td colspan="3"><textarea id="fillContent" style="width: 100%;max-width:100%;height: 100px;" placeholder="题目内容"></textarea></td>
                                             </tr>
-
+                                               
                                             <tr>
-                                                <td colspan="1"><strong>A. </strong></td>
-                                                <td colspan="3"><input id="singleA" type="text" style="width: 100%;" name="inputA" placeholder="A选项内容"></td>
+                                                <td colspan="1"><strong>答案:</strong></td>
+                                                <td colspan="3"><input id="fillAnswer" type="text" style="width: 100%;" name="fillAnswer" placeholder="答案内容"></td>
                                             </tr>
+                                            <!--
+                                            <tr>
+                                                <td colspan="1"><strong>注释:</strong></td>
+                                                <td colspan="3"><input id="fillTip" type="text" name="tip" placeholder="题目注释" style="width: 100%;" ></td>
+                                            </tr>
+                                          
                                             <tr>
                                                 <td colspan="1"><strong>B. </strong></td>
                                                 <td colspan="3"><input id="singleB" type="text" style="width: 100%;" name="inputA" placeholder="B选项内容"></td>
@@ -205,7 +196,7 @@
                                             <tr>
                                                 <td colspan="1"><strong>D. </strong></td>
                                                 <td colspan="3"><input id="singleD" type="text" style="width: 100%;" name="inputA" placeholder="D选项内容"></td>
-                                            </tr>
+                                            </tr>  
                                             <tr>
                                                 <td><strong>答案:</strong></td>
                                                 <td colspan="3" align="left" >
@@ -222,16 +213,13 @@
                                                         <input  type="radio" name="singleOptionsRadios" value="D"> D
                                                     </label>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="1"><strong>注释:</strong></td>
-                                                <td colspan="3"><input id="singleTip" type="text" name="tip" placeholder="题目注释" style="width: 100%;" ></td>
-                                            </tr>
+                                            </tr> -->
+                                            
                                         </table>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" onclick="addSingle()">提交</button>
+                                    <button type="button" class="btn btn-primary" onclick="addfill()">提交</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal"  aria-hidden="true">返回</button>
                                 </div>
                             </div>
@@ -297,7 +285,7 @@
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="chooseOk">确定</button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-primary" id="fillsOk">确定</button>&nbsp;&nbsp;
                     <button type="button" class="btn btn-default" data-dismiss="modal"  aria-hidden="true">取消</button>
                 </div>
             </div>
@@ -306,13 +294,12 @@
 
 
 
-    <script src="<%=request.getContextPath()%>/frame/jquery/js/jquery.js" type="text/javascript"></script>
-    <script src="<%=request.getContextPath()%>/frame/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="<%=request.getContextPath()%>/resources/js/admin/questionManage.js" type="text/javascript"></script>
+    <%@include file="./include/foot.jsp" %>
+    <script src="<%=request.getContextPath()%>/resources/interviewer/js/fillQuestionManage.js" type="text/javascript"></script>
     <script>
-        $("#singleModal").on('hidden', function () {
+        $("#fillModal").on('hidden', function () {
             /*拟态框隐藏事件，用于初始化输入框，因为拟态框隐藏不会再次初始化，会保留之前输入的数据           单项*/
-        	singleClean();
+        	fillClean();
         	$("#tipModal").modal('hide');
         })
 

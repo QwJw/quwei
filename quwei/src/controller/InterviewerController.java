@@ -30,6 +30,16 @@ public interface InterviewerController {
 	 * 删除问题
 	 */
 	public void deleteChoice();
+	
+	/**
+	 * 添加或更新填空题
+	 */
+	public void addOrUpdateFill();
+	/**
+	 * 删除填空问题
+	 */
+	public void deleteFill();
+	
 	/**
 	 * 注销
 	 */
